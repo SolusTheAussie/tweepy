@@ -61,6 +61,9 @@ handling them can be done by wrapping the cursor in an iterator.
 Running this snippet will print all users you follow that themselves follow
 less than 300 people total - to exclude obvious spambots, for example - and
 will wait for 15 minutes each time it hits the rate limit.
+
+Adding `count=200` as a parameter for api.followers causes the cursor
+to download the maximum 200 followers per request rather than the default 20, letting you download 10x as many followers within the rate limit.
    
 .. code-block :: python
    
@@ -74,6 +77,6 @@ will wait for 15 minutes each time it hits the rate limit.
            except tweepy.RateLimitError:
                time.sleep(15 * 60)
    
-   for follower in limit_handled(tweepy.Cursor(api.followers).items()):
+   for follower in limit_handled(tweepy.Cursor(api.followers, count=200).items()):
        if follower.friends_count < 300:
            print(follower.screen_name)
